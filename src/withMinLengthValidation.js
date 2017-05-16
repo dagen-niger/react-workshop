@@ -1,21 +1,14 @@
 import React from 'react';
 
-const alert = `<span>
-  Minimum 
-  4
-   required.
-</span>`
+const alert = count => <span>Minimum {count} required.</span>
+const isFail = (props, count) => String(props.value).length <= count
 
 const withMinLengthValidation = (component, count) =>
-    props => {
-        const fail = String(props.value).length <= 4
-        return (
-            <div>
-                {React.createElement(component, { ...props })}
-                {fail && alert}
-            </div>
-        )
-    }
-
+    props => (
+        <div>
+            {React.createElement(component, props)}
+            {isFail(props, count) && alert(count)}
+        </div>
+    )
 
 export default withMinLengthValidation
