@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Children } from 'react';
 
-export default ({ children }) => (
-	// TODO: Build title component
+export default ({ children, onClick, index }) => (
+    <button onClick={() => onClick(index)}>
+        { children }
+    </button>
 )
