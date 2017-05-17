@@ -17,10 +17,29 @@ const AddIngredient = ({ name, setName, addIngredient, successMessage }) => (
   </form>
 );
 
+const addIngredientMutation = gql`
+  mutation addIngredient($name: String!) {
+    addIngredient(name: $name) {
+      _id
+      name
+    }
+  }
+`
+
 const enhance = compose(
   withState('name', 'setName', ''),
   withState('successMessage', 'setSuccessMessage', ''),
-  // TODO add ingredient mutation here
+  withHandlers({
+    'addIngredient' : ({ ownProps, mutate }) => event => {
+      event.preventDefault()
+      mutate({
+        variables: { name: ownProps.name }
+      }).then(response => {
+        console.log('RESPONSE', response)
+      })
+    }
+  }),
+  graphql(addIngredientMutation),
 );
 
 export default enhance(AddIngredient);
