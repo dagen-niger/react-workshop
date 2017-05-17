@@ -1,11 +1,11 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Link } from 'react-router-dom';
 import { compose, withState } from 'recompose';
 import withLoading from '../withLoading';
 
-const Recipes = ({
+const DetailRecipe = ({
+  match,
   data,
   vegetarianFilter,
   setVegetarianFilter,
@@ -51,11 +51,10 @@ const Recipes = ({
     <h1>Recipes</h1>
     {data.recipes && data.recipes.map(({ title, preparation, ingredients, _id }) => (
       <div key={_id}>
-        <Link to={`/${_id}`}>{title}</Link>
         <h3>Preparation</h3>
         <div>
           <p>
-          {preparation.map((entry, index) => <span key={entry}>{index+1}. {entry}<br /></span>)}
+            {preparation.map((entry, index) => <span key={entry}>{index+1}. {entry}<br /></span>)}
           </p>
         </div>
         <h3>Ingredients</h3>
@@ -69,36 +68,35 @@ const Recipes = ({
       </div>
     ))}
   </div>
-);
+)
 
+// TODO: передавать props.match.params.id тут, сделав филтр по recipe._id
 const RecipeQuery = gql`
-  query RecipeQuery($vegetarian: Boolean, $ingredient: String) {
-    recipes(vegetarian: $vegetarian, ingredient: $ingredient) {
-      _id
-      title
-      vegetarian
-      preparation
-      ingredients {
-        _id
-        name
-      }
+    query RecipeQuery($vegetarian: Boolean, $ingredient: String) {
+        recipes(vegetarian: $vegetarian, ingredient: $ingredient) {
+            _id
+            title
+            vegetarian
+            preparation
+            ingredients {
+                _id
+                name
+            }
+        }
+        ingredients {
+            _id
+            name
+        }
     }
-    ingredients {
-      _id
-      name
-    }
-  }
 `;
 
 const enhance = compose(
-  withState('vegetarianFilter', 'setVegetarianFilter', null),
-  withState('ingredientFilter', 'setIngredientFilter', null),
   graphql(RecipeQuery, {
     options: props => {
       return {
         variables: {
-          vegetarian : props.vegetarianFilter,
-          ingredient : props.ingredientFilter,
+          vegetarian : props.vegetarian,
+          ingredient : props.ingredient,
         }
       }
     }
@@ -106,4 +104,4 @@ const enhance = compose(
   withLoading,
 );
 
-export default enhance(Recipes);
+export default enhance(DetailRecipe)
