@@ -7,13 +7,11 @@ import { getIngredient } from '../models/Ingredient'
 // TODO: Write your resolvers
 export default {
 	Query: {
-		recipes: (root, { vegetarian, ingredient }) =>
-			getRecipes({ vegetarian, ingredient })
+		recipes: (root, params) => getRecipes(params),
+    ingredients: (root, params) => getRecipes(params),
 	},
 	Recipe: {
-		ingredients : recipe =>
-			recipe.ingredients.map(ingredient =>
-				getIngredient(ingredient)
-			)
+		ingredients : ({ ingredients }) =>
+			ingredients.map(ingredient => getIngredient(ingredient))
 	}
 };

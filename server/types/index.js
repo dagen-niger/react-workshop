@@ -22,7 +22,7 @@ const Ingredient = `
 // TODO: Define your queries
 const Query = /* GraphQL */`
 	type Query {
-		recipes(vegetarian: Boolean, ingredient: String, ingredients: [Ingredient]): [Recipe]
+		recipes(vegetarian: Boolean, ingredient: String): [Recipe]
 		ingredients : [Ingredient]
 	}
 `;
