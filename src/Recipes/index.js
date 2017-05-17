@@ -42,18 +42,20 @@ const Recipes = ({
         }}
       >
         <option value={''}>Not active</option>
-        {data.ingredients.map(ingredient => (
+        {data.ingredients && data.ingredients.map(ingredient => (
           <option value={ingredient._id}>{ingredient.name}</option>
         ))}
       </select>
     </div>
     <h1>Recipes</h1>
-    {data.recipes.map(({ title, preparation, ingredients, _id }) => (
+    {data.recipes && data.recipes.map(({ title, preparation, ingredients, _id }) => (
       <div key={_id}>
         <h2>{title}</h2>
         <h3>Preparation</h3>
         <div>
-          {preparation.map(entry => <p key={entry}>{entry}</p>)}
+          <p>
+          {preparation.map((entry, index) => <span key={entry}>{index+1}. {entry}<br /></span>)}
+          </p>
         </div>
         <h3>Ingredients</h3>
         <div>
@@ -68,11 +70,40 @@ const Recipes = ({
   </div>
 );
 
+const RecipeQuery = gql`
+  query RecipeQuery($vegetarian: Boolean, $ingredient: String) {
+    recipes(vegetarian: $vegetarian, ingredient: $ingredient) {
+      _id
+      title
+      vegetarian
+      preparation
+      ingredients {
+        _id
+        name
+      }
+    }
+    ingredients {
+      _id
+      name
+    }
+  }
+`;
+
 const enhance = compose(
   withState('vegetarianFilter', 'setVegetarianFilter', null),
   withState('ingredientFilter', 'setIngredientFilter', null),
-  // TODO fill in your graphql higher order component here
-  withLoading
+  graphql(RecipeQuery, {
+    options: props => {
+      console.log('props', props)
+      return {
+        variables: {
+          vegetarian : props.vegetarianFilter,
+          ingredient : props.ingredientFilter,
+        }
+      }
+    }
+  }),
+  withLoading,
 );
 
 export default enhance(Recipes);
