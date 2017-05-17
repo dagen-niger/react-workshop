@@ -92,27 +92,6 @@ Object {
 }
 `;
 
-exports[`GraphQL server Queries should return a list of ingredients 1`] = `
-Object {
-  "data": Object {
-    "ingredients": Array [
-      Object {
-        "name": "Beef",
-      },
-      Object {
-        "name": "Chicken",
-      },
-      Object {
-        "name": "Salad",
-      },
-      Object {
-        "name": "Salad dressing",
-      },
-    ],
-  },
-}
-`;
-
 exports[`GraphQL server Queries should return a list of recipes 1`] = `
 Object {
   "data": Object {
